@@ -6,7 +6,7 @@ const useMeta = (title: string, description: string, canonicalPath: string) => {
         document.title = title;
 
         const updateMeta = (selector: string, content: string) => {
-            let tag = document.querySelector(selector);
+            const tag = document.querySelector(selector);
             if (tag) {
                 tag.setAttribute('content', content);
             }
@@ -19,7 +19,7 @@ const useMeta = (title: string, description: string, canonicalPath: string) => {
         updateMeta('meta[property="twitter:title"]', title);
         updateMeta('meta[property="twitter:description"]', description);
 
-        let canonical = document.querySelector('link[rel="canonical"]');
+        const canonical = document.querySelector('link[rel="canonical"]');
         if (canonical) {
             canonical.setAttribute('href', `https://malluchat.live${canonicalPath}`);
         }
@@ -259,34 +259,41 @@ export const MalluFreeVideoCallPage = () => {
     );
 };
 
-// 6. Strangers Mallu Chat Page
+// 6. Strangers Mallu Chat Page (Targeting: "mallu stranger chat website", "mallu strangers chatting website", "mallu stranger chat")
 export const StrangersMalluChatPage = () => {
-    const currentPath = typeof window !== 'undefined' && window.location.pathname.includes('strangers-mallu-chat')
-        ? '/strangers-mallu-chat'
-        : '/mallu-strangers-chat';
+    let currentPath = '/mallu-stranger-chat-website';
+    if (typeof window !== 'undefined') {
+        const p = window.location.pathname;
+        if (p.includes('/mallu-stranger-chat-website')) currentPath = '/mallu-stranger-chat-website';
+        else if (p.includes('/mallu-strangers-chatting-website')) currentPath = '/mallu-strangers-chatting-website';
+        else if (p.includes('/mallu-strangers-chat')) currentPath = '/mallu-strangers-chat';
+        else if (p.includes('/mallu-stranger-chat')) currentPath = '/mallu-stranger-chat';
+        else if (p.includes('/strangers-mallu-chat')) currentPath = '/strangers-mallu-chat';
+        else if (p.includes('/chat-with-strangers-in-mallu')) currentPath = '/chat-with-strangers-in-mallu';
+    }
 
     useMeta(
-        'Mallu Strangers Chat - Chat with Strangers in Malayalam Online | MalluChat',
-        'Join Mallu Strangers Chat on MalluChat.live. Talk and video call with random strangers in Kerala and worldwide. 100% free anonymous chat, zero registration.',
+        'Mallu Stranger Chat Website - #1 Free Malayalam Strangers Chat & Video | MalluChat',
+        'Join the #1 Mallu stranger chat website on MalluChat.live. Instant anonymous Malayalam strangers chatting, live Kerala chat rooms, & 1-on-1 random video calls with zero registration.',
         currentPath
     );
 
     return (
         <div style={containerStyle} className="glass">
-            <Header title="Mallu Strangers Chat & Malayalam Chat Online" />
+            <Header title="Mallu Stranger Chat Website & Free Malayalam Chat Online" />
             <CallToAction />
             <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-                Looking to <strong>chat with strangers in Mallu</strong>? Welcome to <strong>Mallu Strangers Chat</strong> on MalluChat.live — Kerala's top destination for anonymous <strong>Malayalam stranger chat</strong>, Kerala live chat rooms, and 1-on-1 random stranger video calls. Connect with Malayalam speakers across Kerala and Gulf NRIs in seconds with zero registration or logins.
+                Welcome to <strong>MalluChat.live</strong> — Kerala&apos;s #1 <strong>Mallu stranger chat website</strong> and top destination for anonymous <strong>Malayalam strangers chatting</strong>, live Kerala chat rooms, and 1-on-1 random stranger video calls. Connect with Malayalam speakers across Kochi, Trivandrum, Kozhikode, Thrissur, and Gulf NRIs in seconds with zero registration or logins.
             </p>
 
-            <Section title="Why MalluChat is the #1 Mallu Strangers Chat Platform">
-                <p>Chatting with strangers safely and privately is our top commitment:</p>
+            <Section title="Why MalluChat is the #1 Mallu Stranger Chat Website">
+                <p>Chatting with strangers safely, privately, and for free is our top priority:</p>
                 <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
-                    <li><strong>100% Anonymous Mallu Strangers Chat:</strong> No phone numbers, emails, or personal details required. Pick any nickname and start talking instantly.</li>
-                    <li><strong>Chat with Strangers in Mallu:</strong> Instant live matching with friendly Malayalis across Kochi, Trivandrum, Kozhikode, Thrissur, Dubai, and worldwide.</li>
-                    <li><strong>Free Stranger Video Calling:</strong> High-definition WebRTC peer-to-peer 1-on-1 random video calls directly in your browser or Android app with zero delay.</li>
-                    <li><strong>Group Chat Rooms & Nearby Users:</strong> Join active public community lobbies or discover users active in your area.</li>
-                    <li><strong>No Coins or Paywalls:</strong> Unlimited text chat, photo sharing, voice messages, and video calling completely free forever.</li>
+                    <li><strong>100% Anonymous Mallu Stranger Chat:</strong> No phone numbers, emails, or personal identities required. Pick any nickname and start talking instantly.</li>
+                    <li><strong>Best Mallu Strangers Chatting Website:</strong> Connect instantly with friendly Malayalis worldwide for meaningful chats, jokes, and friendship.</li>
+                    <li><strong>Free 1-on-1 Stranger Video Calling:</strong> High-definition WebRTC peer-to-peer random video calls directly in your browser or Android app.</li>
+                    <li><strong>Top Alternative to Sallapam &amp; Y99:</strong> Fast modern glassmorphism interface, active moderation, zero spam, and no coin paywalls.</li>
+                    <li><strong>Group Chat Rooms &amp; Nearby Users:</strong> Join active public community lobbies or discover users active in your city.</li>
                 </ul>
             </Section>
 
@@ -294,7 +301,7 @@ export const StrangersMalluChatPage = () => {
                 <ol style={{ marginLeft: '1.5rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
                     <li>Tap <strong>Start Chatting Now</strong> to enter the main lobby.</li>
                     <li>Type any anonymous display name (e.g. <em>MalluStranger</em>).</li>
-                    <li>Select <strong>World Chat</strong> or browse the active users list to send instant private chat requests or start a 1-on-1 random video call!</li>
+                    <li>Select <strong>World Chat</strong> or browse active users to send instant private chat requests or start a 1-on-1 random video call!</li>
                 </ol>
             </Section>
             <SeoNavFooter />
@@ -302,29 +309,76 @@ export const StrangersMalluChatPage = () => {
     );
 };
 
-// 7. Mallu Chatting Website Page
+// 7. Mallu Chatting Website Page (Targeting: "mallu chatting website", "mallu chating website", "malayalam chatting website")
 export const MalluChattingWebsitePage = () => {
     useMeta(
-        'Mallu Chatting Website - Mallu Video Calling Website & Free Chat | MalluChat',
-        'Looking for the top Mallu chatting website? MalluChat is the #1 Mallu video calling website for Mallu chat online, Mallu free calling, and stranger chat.',
+        'Mallu Chatting Website - #1 Malayalam Chatting Website & Live Rooms | MalluChat',
+        'Looking for the top Mallu chatting website? MalluChat is Kerala\'s #1 Malayalam chatting website for anonymous stranger chat, Kerala live rooms, and free video calls.',
         '/mallu-chatting-website'
     );
 
     return (
         <div style={containerStyle} className="glass">
-            <Header title="Mallu Chatting Website & Mallu Video Calling Website" />
+            <Header title="Mallu Chatting Website - Top Malayalam Chatting Website" />
             <CallToAction />
             <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
-                Searching for a reliable <strong>Mallu Chatting Website</strong> and <strong>Mallu Video Calling Website</strong>? MalluChat.live is Kerala&apos;s leading web-based platform offering real-time public rooms, <strong>Mallu Free Chat</strong>, <strong>Mallu Free Calling</strong>, and <strong>Mallu Free Video Calling</strong>.
+                Searching for the best <strong>Mallu Chatting Website</strong> and <strong>Malayalam Chatting Website</strong>? MalluChat.live is Kerala&apos;s leading online chat portal offering real-time public rooms, <strong>Mallu Free Chat</strong>, <strong>Mallu Stranger Chat</strong>, and 1-on-1 <strong>Mallu Video Calling</strong> with zero registration.
             </p>
 
             <Section title="Features of Our Mallu Chatting Website">
                 <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
-                    <li><strong>Mallu Video Calling Website:</strong> High quality P2P video streaming with zero paywalls.</li>
+                    <li><strong>#1 Malayalam Chatting Website:</strong> Connect with thousands of active Malayalees across Kerala and Gulf countries (UAE, Qatar, Saudi Arabia).</li>
+                    <li><strong>Mallu Stranger Chat Integration:</strong> Seamlessly switch between group discussions and private 1-on-1 stranger messaging.</li>
+                    <li><strong>Mallu Video Calling Website:</strong> High quality P2P video streaming with zero coins or subscription fees.</li>
                     <li><strong>Mallu Free Calling Website:</strong> Crystal-clear audio calling directly inside mobile and desktop web browsers.</li>
-                    <li><strong>Mallu Chat Online Community:</strong> Connect with thousands of active Malayalees worldwide.</li>
                 </ul>
             </Section>
+            <SeoNavFooter />
+        </div>
+    );
+};
+
+// 7b. Mallu Random Chatting Website Page (Targeting: "mallu random chatting website", "mallu roundam chatting website", "mallu random chat")
+export const MalluRandomChattingWebsitePage = () => {
+    let currentPath = '/mallu-random-chatting-website';
+    if (typeof window !== 'undefined' && window.location.pathname.includes('/mallu-random-chat')) {
+        currentPath = window.location.pathname.includes('/mallu-random-chatting-website') 
+            ? '/mallu-random-chatting-website' 
+            : '/mallu-random-chat';
+    }
+
+    useMeta(
+        'Mallu Random Chatting Website - Anonymous Kerala Stranger Chat | MalluChat',
+        'Top-ranked Mallu random chatting website for instant Malayalam stranger chat, live Kerala random matching, and 1-on-1 WebRTC video calls without signup.',
+        currentPath
+    );
+
+    return (
+        <div style={containerStyle} className="glass">
+            <Header title="Mallu Random Chatting Website - Kerala Stranger Match" />
+            <CallToAction />
+            <p style={{ color: 'var(--text-muted)', marginBottom: '2rem' }}>
+                Welcome to the leading <strong>Mallu Random Chatting Website</strong> (<a href="https://malluchat.live/" style={{ color: 'var(--primary)' }}>MalluChat.live</a>)! If you are searching for a fast, anonymous <strong>Mallu random chat</strong> or <strong>Mallu roundam chatting website</strong> to meet Malayali strangers online, MalluChat connects you in a single tap with live users across Kerala and worldwide.
+            </p>
+
+            <Section title="Why MalluChat is the Best Mallu Random Chatting Website">
+                <p>Enjoy effortless random pairing and authentic Malayalam conversations:</p>
+                <ul style={{ marginLeft: '1.5rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
+                    <li><strong>Instant 1-Click Random Pairing:</strong> Connect with a random Malayalam speaker immediately without login credentials or email confirmation.</li>
+                    <li><strong>Random Text &amp; Video Calling:</strong> Switch seamlessly between anonymous text chat and crystal-clear 1-on-1 random WebRTC video calls.</li>
+                    <li><strong>100% Free Forever:</strong> Unlimited stranger matching with zero coins, credits, or hidden subscription costs.</li>
+                    <li><strong>Privacy &amp; Anonymity:</strong> Your identity is never stored. Pick any anonymous handle and start chatting instantly.</li>
+                </ul>
+            </Section>
+
+            <Section title="How to Use Mallu Random Chat">
+                <ol style={{ marginLeft: '1.5rem', marginTop: '0.5rem', marginBottom: '1rem' }}>
+                    <li>Click <strong>Start Chatting Now</strong> to launch MalluChat.</li>
+                    <li>Choose your nickname or enter as a guest.</li>
+                    <li>Start chatting in World Chat or pick any online user to start an instant private random chat or video call!</li>
+                </ol>
+            </Section>
+            <SeoNavFooter />
         </div>
     );
 };
@@ -562,6 +616,9 @@ const SeoNavFooter = () => (
         <h4 style={{ color: 'var(--primary)', marginBottom: '1rem', fontSize: '1rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Explore Popular Mallu Chat Lobbies</h4>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.8rem', justifyContent: 'center', fontSize: '0.88rem' }}>
             <a href="/" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Chat Live</a>
+            <a href="/mallu-stranger-chat-website" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Stranger Chat Website</a>
+            <a href="/mallu-chatting-website" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Chatting Website</a>
+            <a href="/mallu-random-chatting-website" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Random Chatting Website</a>
             <a href="/mallu-chat-rooms" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Chat Rooms</a>
             <a href="/mallu-video-call" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Video Call</a>
             <a href="/mallu-open-chat" style={{ color: 'var(--text-muted)', textDecoration: 'none', background: 'rgba(255,255,255,0.04)', padding: '6px 12px', borderRadius: '8px' }}>Mallu Open Chat</a>

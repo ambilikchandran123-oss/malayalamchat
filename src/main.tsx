@@ -11,6 +11,7 @@ import {
   MalluFreeVideoCallPage, 
   StrangersMalluChatPage, 
   MalluChattingWebsitePage, 
+  MalluRandomChattingWebsitePage,
   MalluRandomVideoCallPage, 
   MalluChatLivePage, 
   MalayalamChattingWebsitePage,
@@ -34,7 +35,8 @@ if (path.includes('/mallu-telegram-chatting')) ComponentToRender = MalluTelegram
 if (path.includes('/telegram-alternative-group-chat')) ComponentToRender = TelegramAlternativeGroupChatPage;
 if (path.includes('/malayalam-chat-online')) ComponentToRender = MalayalamChatOnlinePage;
 if (path.includes('/mallu-free-video-call')) ComponentToRender = MalluFreeVideoCallPage;
-if (path.includes('/mallu-strangers-chat') || path.includes('/strangers-mallu-chat') || path.includes('/mallu-stranger-chat') || path.includes('/chat-with-strangers-in-mallu')) ComponentToRender = StrangersMalluChatPage;
+if (path.includes('/mallu-stranger-chat-website') || path.includes('/mallu-strangers-chatting-website') || path.includes('/mallu-strangers-chat') || path.includes('/strangers-mallu-chat') || path.includes('/mallu-stranger-chat') || path.includes('/chat-with-strangers-in-mallu')) ComponentToRender = StrangersMalluChatPage;
+if (path.includes('/mallu-random-chatting-website') || path.includes('/mallu-random-chat')) ComponentToRender = MalluRandomChattingWebsitePage;
 if (path.includes('/mallu-chatting-website')) ComponentToRender = MalluChattingWebsitePage;
 if (path.includes('/mallu-random-video-call')) ComponentToRender = MalluRandomVideoCallPage;
 if (path.includes('/mallu-chat-live')) ComponentToRender = MalluChatLivePage;
