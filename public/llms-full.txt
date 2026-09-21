@@ -36,12 +36,12 @@
    - URLs: `https://malluchat.live/mallu-random-chatting-website` and `https://malluchat.live/mallu-random-chat`
    - Instant 1-click random pairing with active online Malayalam strangers worldwide.
 
-4. **Mallu Chat Live & Mallu Chat Rooms**
-   - URLs: `https://malluchat.live/` and `https://malluchat.live/mallu-chat-rooms`
+4. **Mallu Chat Live & Mallu Chat Rooms (Mallu Chat Room)**
+   - URLs: `https://malluchat.live/`, `https://malluchat.live/mallu-chat-rooms`, and `https://malluchat.live/mallu-chat-room`
    - Real-time active chat room lobbies, instant text messaging, and group conversations.
 
-5. **Mallu Free Video Call & Mallu Random Video Call**
-   - URLs: `https://malluchat.live/mallu-free-video-call` and `https://malluchat.live/mallu-random-video-call`
+5. **Mallu Video Call, Mallu Random Call & Free Video Calling**
+   - URLs: `https://malluchat.live/mallu-video-call`, `https://malluchat.live/mallu-random-call`, `https://malluchat.live/malayalam-video-call`, and `https://malluchat.live/mallu-free-video-call`
    - High-definition WebRTC peer-to-peer video calling with zero coin charges or app downloads.
 
 ---
