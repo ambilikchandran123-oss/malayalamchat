@@ -13,7 +13,7 @@ class MalluChatApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MalluChat',
+      title: 'MalayalamChat',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.dark,
@@ -51,7 +51,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
       body: SafeArea(
         child: InAppWebView(
           key: webViewKey,
-          initialUrlRequest: URLRequest(url: WebUri("https://malluchat.live")),
+          initialUrlRequest: URLRequest(url: WebUri("https://malayalamchat.online")),
           initialSettings: settings,
           onWebViewCreated: (controller) {
             webViewController = controller;

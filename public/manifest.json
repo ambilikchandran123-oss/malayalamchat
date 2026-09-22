@@ -1,7 +1,7 @@
 {
-    "name": "MalluChat Online",
-    "short_name": "MalluChat",
-    "description": "Free Chatting & Calling for Mallus. Public chat, zero-log privacy.",
+    "name": "MalayalamChat Online - മലയാളം ചാറ്റ്",
+    "short_name": "MalayalamChat",
+    "description": "Free Malayalam Chatting & Video Calling for Malayalees worldwide. Anonymous random chat, Kerala chatrooms, P2P video calls with zero-log privacy.",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#0f1115",

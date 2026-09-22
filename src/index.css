@@ -2732,3 +2732,28 @@ body {
     align-items: flex-end;
   }
 }
+
+/* Adipoli Malayalam Quick Phrases Bar & Chips */
+.malayalam-quick-bar {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px 8px 2px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.malayalam-quick-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.quick-phrase-chip {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.quick-phrase-chip:hover,
+.quick-phrase-chip:active {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 4px 12px rgba(74, 222, 128, 0.2);
+}

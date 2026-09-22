@@ -2638,7 +2638,7 @@ export default function App() {
 
   const handleAdminLogin = () => {
     // Basic verification logic
-    if (adminEmail === 'admin@malluchat.live' && adminPassword === 'Admin@123') {
+    if ((adminEmail === 'admin@malayalamchat.online' || adminEmail === 'admin@malluchat.live') && adminPassword === 'Admin@123') {
       setIsAdminAuth(true);
       setShowAdminLogin(false);
       setShowAdminPanel(true);
@@ -3004,8 +3004,11 @@ export default function App() {
       {/* Left Sidebar (Desktop/Tablet) */}
       <div className="sidebar-left glass">
         <div className="sidebar-header">
-          <MalluLogo size={36} />
-          <h2>MalluChat</h2>
+          <MalluLogo size={38} />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <h2 style={{ fontSize: '1.35rem', lineHeight: '1.2' }}>MalayalamChat</h2>
+            <span style={{ fontSize: '0.72rem', color: 'var(--primary)', fontWeight: '600', letterSpacing: '0.5px' }}>മലയാളം ലൈവ് ചാറ്റ്</span>
+          </div>
         </div>
 
         <nav className="desktop-nav">
@@ -3077,22 +3080,70 @@ export default function App() {
               >
                 <X size={20} />
               </button>
-              <h2 style={{ marginBottom: '1rem' }}>Join the Chat</h2>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>Choose a display name to start chatting anonymously.</p>
-              <input
-                className="input-field"
-                placeholder="Enter display name..."
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                maxLength={20}
-                autoFocus
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && username.trim()) setShowLoginModal(false);
-                }}
-              />
+              <h2 style={{ marginBottom: '0.5rem' }}>Join the Chat</h2>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.88rem' }}>Choose an anonymous display name to start chatting.</p>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                <input
+                  className="input-field"
+                  placeholder="Enter display name..."
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  maxLength={20}
+                  autoFocus
+                  style={{ flex: 1, margin: 0 }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' && username.trim()) setShowLoginModal(false);
+                  }}
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  style={{ padding: '0.6rem 0.9rem', fontSize: '0.85rem', width: 'auto', margin: 0, whiteSpace: 'nowrap' }}
+                  onClick={() => {
+                    const randoms = ['Kochi_Mallu', 'Calicut_Guy', 'Thrissur_Gadhi', 'Kerala_Vibe', 'Malabar_Star', 'Trivandrum_Bro', 'Gulf_Malayali', 'Palakkad_Chathan', 'Kannur_Macha'];
+                    setUsername(randoms[Math.floor(Math.random() * randoms.length)]);
+                  }}
+                  title="Generate Random Nickname"
+                >
+                  🎲 Random
+                </button>
+              </div>
+
+              {/* Quick Kerala District Tags */}
+              <div style={{ marginBottom: '1.2rem', textAlign: 'left' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Quick District Tag (Optional):</span>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '6px' }}>
+                  {['🌴 കൊച്ചി', '🌴 കോഴിക്കോട്', '🌴 തിരുവനന്തപുരം', '🌴 തൃശൂർ', '🌴 മലപ്പുറം', '🌴 കണ്ണൂർ', '✈️ പ്രവാസി'].map((dist, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => {
+                        const cleanDist = dist.replace(/[🌴✈️]\s*/g, '');
+                        if (!username.trim()) {
+                          setUsername(`${cleanDist}_User`);
+                        } else if (!username.includes(cleanDist)) {
+                          setUsername(`${username}_${cleanDist}`);
+                        }
+                      }}
+                      style={{
+                        background: 'rgba(255,255,255,0.06)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        color: 'var(--text-muted)',
+                        borderRadius: '12px',
+                        padding: '3px 8px',
+                        fontSize: '0.72rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {dist}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <button
                 className="btn btn-primary"
-                style={{ marginTop: '1rem' }}
+                style={{ marginTop: '0.5rem' }}
                 disabled={!username.trim()}
                 onClick={() => setShowLoginModal(false)}
               >
@@ -3752,14 +3803,14 @@ export default function App() {
                 ) : (
                   <div style={{ fontWeight: 600 }}>
                     {viewMode === 'public'
-                      ? 'Mallu Public Chat'
+                      ? 'Malayalam Public Chat'
                       : 'Nearby Users'}
                   </div>
                 )}
                 <div className="header-status">
                   <span className="status-dot"></span>
                   {viewMode === 'public'
-                    ? `${liveUsers} Online right now`
+                    ? `${liveUsers} Online right now • കേരളം ലൈവ്`
                     : viewMode === 'random'
                       ? `${demoUsers.filter(p => p.status === 'online').length} nearby active users`
                       : (status === 'connected' ? 'Secure Connect' : 'Waiting for User...')}
@@ -3951,8 +4002,8 @@ export default function App() {
             <div ref={chatContainerRef} className="chat-messages" onScroll={handleChatScroll} style={{ paddingBottom: '10px' }}>
               <div className="system-message">
                 {viewMode === 'public'
-                  ? 'Welcome to Mallu Public Chat. Anyone can see messages here.'
-                  : 'Secure Connection Established. Messages are direct and not stored anywhere.'}
+                  ? '🌴 മലയാളത്തിലേക്ക് സ്വാഗതം! Welcome to MalayalamChat.online — Kerala\'s #1 Live Chat & Random Calling Platform.'
+                  : '🔒 Secure Connection Established. Direct peer-to-peer encrypted WebRTC link.'}
               </div>
 
               {(viewMode === 'private' ? messages : publicMessages).map((msg, idx) => {
@@ -4142,6 +4193,45 @@ export default function App() {
                 </div>
               )}
 
+              {/* Adipoli Malayalam Quick Phrases Bar */}
+              <div className="malayalam-quick-bar" style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '8px', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
+                {['ഹലോ മച്ചാനെ! 🌴', 'എന്തൊക്കെയുണ്ട്? ✨', 'സുഖമാണോ? 💬', 'നാട്ടിൽ എവിടെയാ? 📍', 'ചായ കുടിച്ചോ? ☕', 'സീൻ ആണോ! 🔥', 'വീഡിയോ കോൾ ചെയ്യാം? 📹', 'അടിപൊളി! 👌', 'വേറെ എന്താ വിശേഷം? 🌟', 'പ്രവാസിയാണോ? ✈️'].map((phrase, i) => (
+                  <button
+                    key={i}
+                    type="button"
+                    className="quick-phrase-chip"
+                    onClick={() => {
+                      if (!username && viewMode === 'public') {
+                        setShowLoginModal(true);
+                        return;
+                      }
+                      if (viewMode === 'public') {
+                        setPublicInput(prev => (prev ? prev + ' ' + phrase : phrase));
+                      } else {
+                        setInputText(prev => (prev ? prev + ' ' + phrase : phrase));
+                      }
+                    }}
+                    style={{
+                      whiteSpace: 'nowrap',
+                      background: 'rgba(255, 255, 255, 0.05)',
+                      border: '1px solid rgba(74, 222, 128, 0.25)',
+                      color: '#e2e8f0',
+                      borderRadius: '16px',
+                      padding: '4px 10px',
+                      fontSize: '0.78rem',
+                      cursor: 'pointer',
+                      flexShrink: 0,
+                      transition: 'all 0.2s ease',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px'
+                    }}
+                  >
+                    {phrase}
+                  </button>
+                ))}
+              </div>
+
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
                 {isRecording ? (
                   <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-main)', fontWeight: 'bold' }}>
@@ -4159,7 +4249,7 @@ export default function App() {
                     <input
                       type="text"
                       className="chat-input"
-                      placeholder={viewMode === 'public' ? "Send to public..." : "Type a secure message..."}
+                      placeholder={viewMode === 'public' ? "Send to public... (മലയാളത്തിൽ സംസാരിക്കാം)" : "Type a secure message..."}
                       value={viewMode === 'public' ? publicInput : inputText}
                       onFocus={() => {
                         if (viewMode === 'public' && !username) {
@@ -4307,16 +4397,15 @@ export default function App() {
           </div>
 
           <div style={{ marginTop: '1.5rem', fontSize: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', borderTop: '1px solid var(--panel-border)', paddingTop: '1rem' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.2rem' }}>Popular SEO Topics</div>
-            <a href="/mallu-stranger-chat-website" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Stranger Chat Website</a>
-            <a href="/mallu-chatting-website" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Chatting Website</a>
-            <a href="/mallu-random-chatting-website" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Random Chatting Website</a>
-            <a href="/mallu-strangers-chat" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Strangers Chat</a>
-            <a href="/mallu-chat-live" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Chat Live</a>
+            <div style={{ fontSize: '0.75rem', fontWeight: 'bold', color: 'var(--primary)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '0.2rem' }}>Popular Malayalam &amp; Mallu Topics</div>
             <a href="/malayalam-chatting-website" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Malayalam Chatting Website</a>
-            <a href="/mallu-random-video-call" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Random Video Call</a>
-            <a href="/mallu-free-video-call" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Free Video Call</a>
+            <a href="/malayalam-video-call" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Malayalam Video Call</a>
             <a href="/malayalam-chat-online" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Malayalam Chat Online</a>
+            <a href="/mallu-stranger-chat-website" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Stranger Chat Website</a>
+            <a href="/mallu-random-chatting-website" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Random Chatting Website</a>
+            <a href="/mallu-chat-rooms" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Chat Rooms</a>
+            <a href="/mallu-video-call" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Video Call</a>
+            <a href="/mallu-chat-live" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Chat Live</a>
             <a href="/mallu-chatting-app" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Chat App</a>
             <a href="/mallu-telegram-chatting" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Mallu Telegram Chatting</a>
             <a href="/telegram-alternative-group-chat" target="_blank" style={{ color: 'var(--text-muted)', textDecoration: 'none' }} onMouseEnter={(e) => e.currentTarget.style.color = 'var(--primary)'} onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}>Telegram Alternative Chat</a>

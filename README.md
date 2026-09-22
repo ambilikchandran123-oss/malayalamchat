@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# MalayalamChat Online (മലയാളം ചാറ്റ്)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> **Official Domain:** [https://malayalamchat.online/](https://malayalamchat.online/)
 
-Currently, two official plugins are available:
+Kerala's #1 free anonymous **Malayalam Chatting Website**, **Malayalam Roundam Chating & Calling**, and **Mallu Stranger Chat** platform. Connect with Malayalam speakers across Kerala (Kochi, Trivandrum, Kozhikode, Thrissur, Malappuram, Kannur, Kollam, Palakkad) and Gulf NRIs (UAE, Qatar, Saudi Arabia, Oman, Kuwait, Bahrain) with zero registration, zero phone numbers, and zero logins.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🌟 Key Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Malayalam Roundam Chating:** 1-click random stranger matching for spontaneous text chats and voice notes.
+- **Anonymous Voice & Video Calling:** Encrypted peer-to-peer WebRTC video and audio calling with zero coin fees or limits.
+- **Kerala Public Lobbies & Chatrooms:** Active group lobbies for cinema, trends, regional banter, and friendship.
+- **"അടിപൊളി" Quick Phrases:** 1-tap Malayalam conversation starters (ഹലോ മച്ചാനെ!, എന്തൊക്കെയുണ്ട്?, ചായ കുടിച്ചോ?, സീൻ ആണോ!, etc.).
+- **Zero Registration & Anonymity:** Jump in instantly with any display nickname and optional Kerala district tag.
+- **End-to-End P2P Privacy:** Private messages and calls stream directly between users without server retention.
+- **Progressive Web App (PWA):** Works smoothly on Android, iPhone (iOS), tablet, and desktop browsers.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Development & Build
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Install dependencies
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Start local development server
+npm run dev
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Build for production & generate all static SEO routes
+npm run build
+
+# Preview production build locally
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🌐 Custom Domain & Deployment
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- Custom domain: `malayalamchat.online`
+- Configured via `public/CNAME` for GitHub Pages automated deployment (`.github/workflows/deploy.yml`).
+- Static SEO routes generated via `node generate-routes.js` during build step.

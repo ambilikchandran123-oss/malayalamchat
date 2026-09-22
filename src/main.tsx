@@ -20,7 +20,7 @@ import {
   MalluOpenChatPage
 } from './SeoPages.tsx'
 const path = window.location.pathname;
-const isBaseRoute = path === '/' || path.endsWith('/malluchat/') || path.endsWith('/malluchat');
+const isBaseRoute = path === '/' || path.endsWith('/malayalamchat/') || path.endsWith('/malayalamchat') || path.endsWith('/malluchat/') || path.endsWith('/malluchat');
 let ComponentToRender = App;
 
 if (path.includes('/privacy')) ComponentToRender = PrivacyPage;
