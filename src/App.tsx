@@ -159,11 +159,12 @@ const getProfileLocationAndDistance = (profile: any, userCoords: { lat: number; 
   });
 
   let chosenCity = sortedCities[0];
-  const isNearest = index % 10 < 7; // 70% nearest city, 30% neighboring districts
+  const isNearest = profile.isLongDistance ? false : (index % 10 < 7); // 70% nearest city, 30% neighboring districts
 
   if (!isNearest && sortedCities.length > 1) {
-    // Pick one of the 4 closest neighboring cities/districts (excluding the closest one at index 0)
-    const neighborIndex = 1 + (index % Math.min(4, sortedCities.length - 1));
+    // Pick from neighboring to farther cities/districts (excluding closest one at index 0)
+    const maxNeighbor = profile.isLongDistance ? sortedCities.length - 1 : Math.min(4, sortedCities.length - 1);
+    const neighborIndex = 1 + (index % maxNeighbor);
     chosenCity = sortedCities[neighborIndex];
   }
 
@@ -211,11 +212,12 @@ const getProfileLocationAndDistance = (profile: any, userCoords: { lat: number; 
     const distVal = parseFloat(calculateDistance(userLat, userLon, userLat + (profile.latOffset ?? 0), userLon + (profile.lonOffset ?? 0)));
     distance = isNaN(distVal) ? (profile.defaultDist ?? 2.5) : distVal;
   } else {
-    // Proximity to the neighboring city center plus small offset
+    // Proximity to the neighboring city center plus offset
     const cityDist = parseFloat(calculateDistance(userLat, userLon, chosenCity.lat, chosenCity.lon));
     const offsetDist = Math.abs((profile.latOffset ?? 0) * 110) + Math.abs((profile.lonOffset ?? 0) * 110);
     const distVal = parseFloat((cityDist + offsetDist).toFixed(1));
-    distance = isNaN(distVal) ? (profile.defaultDist ?? 45.0) : distVal;
+    const computed = isNaN(distVal) ? (profile.defaultDist ?? 45.0) : distVal;
+    distance = profile.isLongDistance ? Math.max(computed, profile.defaultDist ?? 35.0) : computed;
   }
 
   return { locationText, distance };
@@ -266,46 +268,89 @@ const getUserSubLocation = (username: string, cityName: string) => {
 };
 
 const DEMO_PROFILES = [
-  { id: 'demo-1', name: 'Aisha', gender: 'female', status: 'online', latOffset: 0.012, lonOffset: -0.008, defaultDist: 1.5, avatar: 'Ai' },
+  { id: 'demo-1', name: 'Aisha', gender: 'female', status: 'online', latOffset: 0.012, lonOffset: -0.008, defaultDist: 1.5, avatar: 'Ai', hasVideo: true },
   { id: 'demo-2', name: 'Ananya', gender: 'female', status: 'online', latOffset: -0.005, lonOffset: 0.015, defaultDist: 1.8, avatar: 'An' },
-  { id: 'demo-3', name: 'Fathima', gender: 'female', status: 'online', latOffset: 0.022, lonOffset: 0.018, defaultDist: 3.2, avatar: 'Fa' },
+  { id: 'demo-3', name: 'Fathima', gender: 'female', status: 'online', latOffset: 0.022, lonOffset: 0.018, defaultDist: 3.2, avatar: 'Fa', hasVideo: true },
   { id: 'demo-4', name: 'Devika', gender: 'female', status: 'offline', latOffset: -0.018, lonOffset: -0.025, defaultDist: 3.8, avatar: 'De' },
-  { id: 'demo-5', name: 'Riza', gender: 'female', status: 'online', latOffset: 0.052, lonOffset: -0.012, defaultDist: 5.7, avatar: 'Ri' },
+  { id: 'demo-5', name: 'Riza', gender: 'female', status: 'online', latOffset: 0.052, lonOffset: -0.012, defaultDist: 5.7, avatar: 'Ri', hasVideo: true },
   { id: 'demo-6', name: 'Gopika', gender: 'female', status: 'online', latOffset: 0.008, lonOffset: 0.042, defaultDist: 4.8, avatar: 'Go' },
   { id: 'demo-7', name: 'Jasna', gender: 'female', status: 'offline', latOffset: -0.045, lonOffset: -0.012, defaultDist: 5.1, avatar: 'Ja' },
-  { id: 'demo-8', name: 'Malavika', gender: 'female', status: 'online', latOffset: 0.052, lonOffset: 0.028, defaultDist: 6.5, avatar: 'Ma' },
+  { id: 'demo-8', name: 'Malavika', gender: 'female', status: 'online', latOffset: 0.052, lonOffset: 0.028, defaultDist: 6.5, avatar: 'Ma', hasVideo: true },
   { id: 'demo-9', name: 'Naadiya', gender: 'female', status: 'online', latOffset: -0.022, lonOffset: 0.058, defaultDist: 6.8, avatar: 'Na' },
   { id: 'demo-10', name: 'Kavya', gender: 'female', status: 'offline', latOffset: 0.062, lonOffset: -0.048, defaultDist: 8.7, avatar: 'Ka' },
-  { id: 'demo-11', name: 'Sneha', gender: 'female', status: 'online', latOffset: -0.032, lonOffset: 0.022, defaultDist: 4.1, avatar: 'Sn' },
+  { id: 'demo-11', name: 'Sneha', gender: 'female', status: 'online', latOffset: -0.032, lonOffset: 0.022, defaultDist: 4.1, avatar: 'Sn', hasVideo: true },
   { id: 'demo-12', name: 'Maria', gender: 'female', status: 'offline', latOffset: 0.045, lonOffset: -0.035, defaultDist: 6.2, avatar: 'Mr' },
-  { id: 'demo-13', name: 'Riya', gender: 'female', status: 'online', latOffset: -0.012, lonOffset: 0.065, defaultDist: 7.1, avatar: 'Ry' },
+  { id: 'demo-13', name: 'Riya', gender: 'female', status: 'online', latOffset: -0.012, lonOffset: 0.065, defaultDist: 7.1, avatar: 'Ry', hasVideo: true },
   { id: 'demo-14', name: 'Sherin', gender: 'female', status: 'offline', latOffset: 0.075, lonOffset: 0.012, defaultDist: 9.3, avatar: 'Sh' },
   { id: 'demo-15', name: 'Sandra', gender: 'female', status: 'online', latOffset: -0.055, lonOffset: 0.045, defaultDist: 8.0, avatar: 'Sa' },
-  { id: 'demo-16', name: 'Farhana', gender: 'female', status: 'offline', latOffset: 0.015, lonOffset: -0.062, defaultDist: 6.9, avatar: 'Fa' },
+  { id: 'demo-16', name: 'Farhana', gender: 'female', status: 'offline', latOffset: 0.015, lonOffset: -0.062, defaultDist: 6.9, avatar: 'Fa', hasVideo: true },
   { id: 'demo-17', name: 'Shilpa', gender: 'female', status: 'online', latOffset: -0.025, lonOffset: -0.055, defaultDist: 7.4, avatar: 'Sp' },
   { id: 'demo-18', name: 'Anjali', gender: 'female', status: 'offline', latOffset: 0.038, lonOffset: 0.052, defaultDist: 5.5, avatar: 'Aj' },
-  { id: 'demo-19', name: 'Akhil', gender: 'male', status: 'online', latOffset: -0.015, lonOffset: -0.008, defaultDist: 1.8, avatar: 'Ak' },
+  { id: 'demo-19', name: 'Akhil', gender: 'male', status: 'online', latOffset: -0.015, lonOffset: -0.008, defaultDist: 1.8, avatar: 'Ak', hasVideo: true },
   { id: 'demo-20', name: 'Faisal', gender: 'male', status: 'online', latOffset: 0.028, lonOffset: 0.002, defaultDist: 3.1, avatar: 'Fi' },
   { id: 'demo-21', name: 'Rahul', gender: 'male', status: 'offline', latOffset: -0.042, lonOffset: 0.025, defaultDist: 5.3, avatar: 'Ra' },
-  { id: 'demo-22', name: 'Shamil', gender: 'male', status: 'online', latOffset: 0.062, lonOffset: -0.022, defaultDist: 7.6, avatar: 'Sm' },
+  { id: 'demo-22', name: 'Shamil', gender: 'male', status: 'online', latOffset: 0.062, lonOffset: -0.022, defaultDist: 7.6, avatar: 'Sm', hasVideo: true },
   { id: 'demo-23', name: 'Vishnu', gender: 'male', status: 'offline', latOffset: -0.038, lonOffset: -0.048, defaultDist: 6.4, avatar: 'Vi' },
   { id: 'demo-24', name: 'Anas', gender: 'male', status: 'online', latOffset: 0.018, lonOffset: 0.055, defaultDist: 5.0, avatar: 'An' },
-  { id: 'demo-25', name: 'Meera', gender: 'female', status: 'online', latOffset: 0.182, lonOffset: -0.052, defaultDist: 21.0, avatar: 'Me' },
+  { id: 'demo-25', name: 'Meera', gender: 'female', status: 'online', latOffset: 0.182, lonOffset: -0.052, defaultDist: 21.0, avatar: 'Me', hasVideo: true },
   { id: 'demo-26', name: 'Nafiah', gender: 'female', status: 'online', latOffset: -0.155, lonOffset: 0.122, defaultDist: 21.8, avatar: 'Na' },
   { id: 'demo-27', name: 'Sruthi', gender: 'female', status: 'offline', latOffset: 0.168, lonOffset: -0.095, defaultDist: 21.4, avatar: 'Sr' },
-  { id: 'demo-28', name: 'Hadiya', gender: 'female', status: 'online', latOffset: -0.215, lonOffset: 0.142, defaultDist: 28.5, avatar: 'Ha' },
+  { id: 'demo-28', name: 'Hadiya', gender: 'female', status: 'online', latOffset: -0.215, lonOffset: 0.142, defaultDist: 28.5, avatar: 'Ha', hasVideo: true },
   { id: 'demo-29', name: 'Aswathy', gender: 'female', status: 'online', latOffset: 0.278, lonOffset: -0.082, defaultDist: 32.0, avatar: 'As' },
   { id: 'demo-30', name: 'Shabna', gender: 'female', status: 'offline', latOffset: -0.175, lonOffset: -0.065, defaultDist: 20.8, avatar: 'Sh' },
-  { id: 'demo-31', name: 'Karthika', gender: 'female', status: 'online', latOffset: 0.192, lonOffset: 0.045, defaultDist: 21.8, avatar: 'Ka' },
+  { id: 'demo-31', name: 'Karthika', gender: 'female', status: 'online', latOffset: 0.192, lonOffset: 0.045, defaultDist: 21.8, avatar: 'Ka', hasVideo: true },
   { id: 'demo-32', name: 'Fida', gender: 'female', status: 'online', latOffset: -0.252, lonOffset: -0.115, defaultDist: 30.7, avatar: 'Fi' },
   { id: 'demo-33', name: 'Parvathy', gender: 'female', status: 'offline', latOffset: 0.312, lonOffset: 0.055, defaultDist: 35.1, avatar: 'Pa' },
-  { id: 'demo-34', name: 'Dilsha', gender: 'female', status: 'online', latOffset: -0.162, lonOffset: 0.085, defaultDist: 20.3, avatar: 'Di' },
+  { id: 'demo-34', name: 'Dilsha', gender: 'female', status: 'online', latOffset: -0.162, lonOffset: 0.085, defaultDist: 20.3, avatar: 'Di', hasVideo: true },
   { id: 'demo-35', name: 'Jithin', gender: 'male', status: 'online', latOffset: 0.185, lonOffset: -0.045, defaultDist: 21.1, avatar: 'Ji' },
   { id: 'demo-36', name: 'Nabeel', gender: 'male', status: 'online', latOffset: -0.178, lonOffset: 0.082, defaultDist: 21.7, avatar: 'Na' },
   { id: 'demo-37', name: 'Pranav', gender: 'male', status: 'offline', latOffset: 0.222, lonOffset: 0.115, defaultDist: 27.8, avatar: 'Pr' },
-  { id: 'demo-38', name: 'Ashique', gender: 'male', status: 'online', latOffset: -0.192, lonOffset: -0.035, defaultDist: 21.6, avatar: 'As' },
+  { id: 'demo-38', name: 'Ashique', gender: 'male', status: 'online', latOffset: -0.192, lonOffset: -0.035, defaultDist: 21.6, avatar: 'As', hasVideo: true },
   { id: 'demo-39', name: 'Siddharth', gender: 'male', status: 'offline', latOffset: 0.265, lonOffset: -0.092, defaultDist: 31.2, avatar: 'Si' },
-  { id: 'demo-40', name: 'Arshad', gender: 'male', status: 'online', latOffset: -0.181, lonOffset: 0.048, defaultDist: 20.8, avatar: 'Ar' }
+  { id: 'demo-40', name: 'Arshad', gender: 'male', status: 'online', latOffset: -0.181, lonOffset: 0.048, defaultDist: 20.8, avatar: 'Ar' },
+  // Additional Muslim & Hindu girls demo profiles for Call Section
+  { id: 'demo-41', name: 'Shahana', gender: 'female', status: 'online', latOffset: 0.009, lonOffset: -0.014, defaultDist: 1.4, avatar: 'Sh', hasVideo: true },
+  { id: 'demo-42', name: 'Haritha', gender: 'female', status: 'online', latOffset: -0.34, lonOffset: 0.28, defaultDist: 34.5, isLongDistance: true, avatar: 'Ha' },
+  { id: 'demo-43', name: 'Ameena', gender: 'female', status: 'online', latOffset: 0.019, lonOffset: 0.007, defaultDist: 2.1, avatar: 'Am', hasVideo: true },
+  { id: 'demo-44', name: 'Athira', gender: 'female', status: 'online', latOffset: 0.38, lonOffset: -0.32, defaultDist: 38.2, isLongDistance: true, avatar: 'At' },
+  { id: 'demo-45', name: 'Thasni', gender: 'female', status: 'online', latOffset: 0.025, lonOffset: -0.015, defaultDist: 2.9, avatar: 'Th' },
+  { id: 'demo-46', name: 'Arya', gender: 'female', status: 'online', latOffset: -0.42, lonOffset: 0.35, defaultDist: 42.0, isLongDistance: true, avatar: 'Ar', hasVideo: true },
+  { id: 'demo-47', name: 'Sumayya', gender: 'female', status: 'offline', latOffset: 0.46, lonOffset: 0.39, defaultDist: 45.8, isLongDistance: true, avatar: 'Su' },
+  { id: 'demo-48', name: 'Revathy', gender: 'female', status: 'online', latOffset: -0.49, lonOffset: -0.42, defaultDist: 49.3, isLongDistance: true, avatar: 'Re' },
+  { id: 'demo-49', name: 'Rameeza', gender: 'female', status: 'online', latOffset: 0.52, lonOffset: -0.45, defaultDist: 52.6, isLongDistance: true, avatar: 'Ra', hasVideo: true },
+  { id: 'demo-50', name: 'Nandana', gender: 'female', status: 'online', latOffset: -0.55, lonOffset: 0.48, defaultDist: 55.4, isLongDistance: true, avatar: 'Na' },
+  { id: 'demo-51', name: 'Safa', gender: 'female', status: 'online', latOffset: 0.58, lonOffset: 0.51, defaultDist: 58.7, isLongDistance: true, avatar: 'Sa', hasVideo: true },
+  { id: 'demo-52', name: 'Pooja', gender: 'female', status: 'online', latOffset: -0.61, lonOffset: -0.54, defaultDist: 61.2, isLongDistance: true, avatar: 'Po' },
+  { id: 'demo-53', name: 'Mubashira', gender: 'female', status: 'offline', latOffset: 0.64, lonOffset: -0.57, defaultDist: 64.5, isLongDistance: true, avatar: 'Mu' },
+  { id: 'demo-54', name: 'Keerthana', gender: 'female', status: 'online', latOffset: -0.67, lonOffset: 0.60, defaultDist: 67.8, isLongDistance: true, avatar: 'Ke', hasVideo: true },
+  { id: 'demo-55', name: 'Fasna', gender: 'female', status: 'online', latOffset: 0.70, lonOffset: 0.63, defaultDist: 70.4, isLongDistance: true, avatar: 'Fa' },
+  { id: 'demo-56', name: 'Reshma', gender: 'female', status: 'online', latOffset: -0.73, lonOffset: -0.66, defaultDist: 73.1, isLongDistance: true, avatar: 'Re', hasVideo: true },
+  { id: 'demo-57', name: 'Hasna', gender: 'female', status: 'online', latOffset: 0.76, lonOffset: -0.69, defaultDist: 76.2, isLongDistance: true, avatar: 'Ha' },
+  { id: 'demo-58', name: 'Gayathri', gender: 'female', status: 'online', latOffset: -0.79, lonOffset: 0.72, defaultDist: 79.5, isLongDistance: true, avatar: 'Ga', hasVideo: true },
+  { id: 'demo-59', name: 'Rinsha', gender: 'female', status: 'online', latOffset: 0.82, lonOffset: 0.75, defaultDist: 82.0, isLongDistance: true, avatar: 'Ri' },
+  { id: 'demo-60', name: 'Saranya', gender: 'female', status: 'offline', latOffset: -0.85, lonOffset: -0.78, defaultDist: 85.3, isLongDistance: true, avatar: 'Sa' },
+  { id: 'demo-61', name: 'Lubna', gender: 'female', status: 'online', latOffset: 0.88, lonOffset: -0.81, defaultDist: 88.0, isLongDistance: true, avatar: 'Lu', hasVideo: true },
+  { id: 'demo-62', name: 'Abhirami', gender: 'female', status: 'online', latOffset: -0.91, lonOffset: 0.84, defaultDist: 91.2, isLongDistance: true, avatar: 'Ab' },
+  { id: 'demo-63', name: 'Shifana', gender: 'female', status: 'online', latOffset: 0.94, lonOffset: 0.87, defaultDist: 94.6, isLongDistance: true, avatar: 'Sh', hasVideo: true },
+  { id: 'demo-64', name: 'Aparna', gender: 'female', status: 'online', latOffset: -0.97, lonOffset: -0.90, defaultDist: 97.4, isLongDistance: true, avatar: 'Ap' },
+  { id: 'demo-65', name: 'Afnitha', gender: 'female', status: 'online', latOffset: 1.00, lonOffset: -0.93, defaultDist: 100.8, isLongDistance: true, avatar: 'Af', hasVideo: true },
+  { id: 'demo-66', name: 'Meenakshi', gender: 'female', status: 'online', latOffset: -1.03, lonOffset: 0.96, defaultDist: 103.5, isLongDistance: true, avatar: 'Me' },
+  { id: 'demo-67', name: 'Nihala', gender: 'female', status: 'online', latOffset: 1.06, lonOffset: 0.99, defaultDist: 106.2, isLongDistance: true, avatar: 'Ni', hasVideo: true },
+  { id: 'demo-68', name: 'Sreelekshmi', gender: 'female', status: 'offline', latOffset: -1.09, lonOffset: -1.02, defaultDist: 109.4, isLongDistance: true, avatar: 'Sr' },
+  { id: 'demo-69', name: 'Najma', gender: 'female', status: 'online', latOffset: 1.12, lonOffset: -1.05, defaultDist: 112.0, isLongDistance: true, avatar: 'Na', hasVideo: true },
+  { id: 'demo-70', name: 'Archana', gender: 'female', status: 'online', latOffset: -1.15, lonOffset: 1.08, defaultDist: 115.3, isLongDistance: true, avatar: 'Ar' },
+  { id: 'demo-71', name: 'Ashida', gender: 'female', status: 'online', latOffset: 1.18, lonOffset: 1.11, defaultDist: 118.6, isLongDistance: true, avatar: 'As', hasVideo: true },
+  { id: 'demo-72', name: 'Aswini', gender: 'female', status: 'online', latOffset: -1.21, lonOffset: -1.14, defaultDist: 121.2, isLongDistance: true, avatar: 'As' },
+  { id: 'demo-73', name: 'Jaseela', gender: 'female', status: 'online', latOffset: 1.24, lonOffset: -1.17, defaultDist: 124.5, isLongDistance: true, avatar: 'Ja', hasVideo: true },
+  { id: 'demo-74', name: 'Akhila', gender: 'female', status: 'online', latOffset: -0.122, lonOffset: 0.118, defaultDist: 19.6, avatar: 'Ak' },
+  { id: 'demo-75', name: 'Shamna', gender: 'female', status: 'offline', latOffset: 1.28, lonOffset: 1.21, defaultDist: 128.0, isLongDistance: true, avatar: 'Sh' },
+  { id: 'demo-76', name: 'Dhanya', gender: 'female', status: 'online', latOffset: -0.129, lonOffset: -0.128, defaultDist: 21.2, avatar: 'Dh', hasVideo: true },
+  { id: 'demo-77', name: 'Rizwana', gender: 'female', status: 'online', latOffset: 0.139, lonOffset: -0.133, defaultDist: 22.0, avatar: 'Ri' },
+  { id: 'demo-78', name: 'Nayana', gender: 'female', status: 'online', latOffset: -0.138, lonOffset: 0.137, defaultDist: 22.8, avatar: 'Na', hasVideo: true },
+  { id: 'demo-79', name: 'Farzana', gender: 'female', status: 'online', latOffset: 0.147, lonOffset: 0.142, defaultDist: 23.6, avatar: 'Fa' },
+  { id: 'demo-80', name: 'Surya', gender: 'female', status: 'online', latOffset: -0.146, lonOffset: -0.145, defaultDist: 24.3, avatar: 'Su', hasVideo: true },
+  { id: 'demo-81', name: 'Bushra', gender: 'female', status: 'online', latOffset: 0.155, lonOffset: -0.151, defaultDist: 25.1, avatar: 'Bu', hasVideo: true },
+  { id: 'demo-82', name: 'Divya', gender: 'female', status: 'offline', latOffset: -0.153, lonOffset: 0.155, defaultDist: 25.9, avatar: 'Di' }
 ];
 
 const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
@@ -1051,14 +1096,14 @@ export default function App() {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleCallDemoUser = (user: any) => {
+  const handleCallDemoUser = (user: any, isVideo: boolean = false) => {
     if (!username) {
       setShowLoginModal(true);
       return;
     }
     
     // Enrich user with locationText and calculatedDistance if missing
-    const enrichedUser = { ...user };
+    const enrichedUser = { ...user, isVideo: isVideo || !!user.hasVideo };
     if (!enrichedUser.locationText || enrichedUser.calculatedDistance === undefined) {
       const sortedOnline = demoUsers
         .filter(p => {
@@ -1079,7 +1124,7 @@ export default function App() {
       const timeout = setTimeout(() => {
         ringtone.stop();
         setInCall(true);
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+        navigator.mediaDevices.getUserMedia({ audio: true, video: enrichedUser.isVideo || false })
           .then((stream) => {
             if (localVideoRef.current) {
               localVideoRef.current.srcObject = stream;
@@ -2727,7 +2772,7 @@ export default function App() {
             {/* Plans Selection Grid */}
             <div className="plans-grid">
               {[
-                { amount: 60, duration: '1 Week', label: 'Weekly Pass', type: 'standard', badge: '' },
+                { amount: 60, duration: '1 Day', label: '1 Day Pass', type: 'standard', badge: '' },
                 { amount: 100, duration: '1 Month', label: 'Monthly Pack', type: 'popular', badge: 'Popular' },
                 { amount: 150, duration: '3 Months', label: 'VIP Gold', type: 'vip', badge: '👑 Best Value' }
               ].map((plan) => (
@@ -3826,11 +3871,11 @@ export default function App() {
                         </div>
 
                         <button
-                          className="match-call-btn"
-                          onClick={() => handleCallDemoUser(profile)}
-                          title={`Call ${profile.name}`}
+                          className={`match-call-btn ${profile.hasVideo ? 'video' : ''}`}
+                          onClick={() => handleCallDemoUser(profile, !!profile.hasVideo)}
+                          title={`${profile.hasVideo ? 'Video Call' : 'Call'} ${profile.name}`}
                         >
-                          <Phone size={18} />
+                          {profile.hasVideo ? <Video size={18} /> : <Phone size={18} />}
                         </button>
                       </div>
                     );

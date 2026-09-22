@@ -1614,6 +1614,17 @@ body {
   box-shadow: 0 6px 16px rgba(74, 222, 128, 0.4);
 }
 
+.match-call-btn.video {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+}
+
+.match-call-btn.video:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(56, 189, 248, 0.5);
+}
+
 /* Paywall Modal */
 .paywall-overlay {
   position: fixed;
