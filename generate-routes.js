@@ -223,8 +223,8 @@ Object.entries(routeMetadata).forEach(([route, meta]) => {
 
   if (meta.h1) {
     customizedHtml = customizedHtml.replace(
-      /<h1 style="color: #4ade80; font-size: 1.8rem; margin-bottom: 1rem;">.*?<\/h1>/,
-      `<h1 style="color: #4ade80; font-size: 1.8rem; margin-bottom: 1rem;">${meta.h1}</h1>`
+      /<h1 style="[^"]*">.*?<\/h1>/,
+      `<h1 style="color: #4ade80; font-size: 1.8rem; margin-bottom: 0.3rem;">${meta.h1}</h1>`
     );
   }
 
