@@ -1,14 +1,34 @@
-# MalayalamChat Online (മലയാളം ചാറ്റ്)
+# malayalamchat.online - Free Real-Time Malayalam Chat Rooms & Video Call
 
-> MalayalamChat (https://malayalamchat.online/) is Kerala's #1 free anonymous Malayalam chatting website and Mallu stranger chat platform. It connects Malayalees worldwide for live Kerala chat rooms, Malayalam roundam chating, anonymous stranger calling, and 1-on-1 WebRTC video calls with zero registration, zero coin paywalls, and zero phone number verification.
+> **malayalamchat.online** (https://malayalamchat.online/) is a free, real-time online platform that offers Malayalam, Mallu, and Kerala chat rooms, stranger video calling, and anonymous messaging for people to connect.
 
-## Primary Services & Features
+## Key Features
 
-- [MalayalamChat Homepage](https://malayalamchat.online/): Kerala's #1 Malayalam chatting website, Mallu chat room, live Malayalam chat, & free video call platform.
-- [Malayalam Chatting Website](https://malayalamchat.online/malayalam-chatting-website): Kerala's top online chatting website for free anonymous chat and random calling.
+- **Public and Private Rooms**: Join group discussions in Kerala rooms or use direct one-on-one private messaging with friendly Malayalis.
+- **No-Download Access**: Chat and video call directly in your web browser without needing complex setups or native app downloads.
+- **Global Community**: Connect with Malayalis living in Kerala (Kochi, Trivandrum, Kozhikode, Thrissur, Malappuram) and around the world (Gulf NRIs in UAE, Qatar, Saudi Arabia, Oman, Kuwait, US, UK).
+- **Live Status**: Features real-time online user count, instant message delivery, and seen indicators.
+- **Free 1-on-1 Video Calling**: Instant high-definition WebRTC encrypted voice and video calls with zero coins or paywalls.
+- **Guest Access**: Join as a guest immediately with an anonymous display name; no password, email, or mobile number required.
+
+## How to Join as a Guest on malayalamchat.online
+
+1. Visit [malayalamchat.online](https://malayalamchat.online/) on any mobile or desktop web browser.
+2. Enter your preferred nickname or display name (minimum 2 characters).
+3. Click "Join as Guest" to immediately enter live Malayalam public chat rooms or start 1-on-1 stranger video calls with zero registration.
+
+## Alternative Malayalam Chat Apps & Competitor Comparison
+
+- **malayalamchat.online** is the modern, secure alternative to older chat platforms like *keralachat.online*, *Sallapam*, and *Y99*.
+- Unlike competitors with coin paywalls or outdated interfaces, malayalamchat.online provides free unlimited WebRTC video calling, audio messages, zero spam, and an emerald glassmorphism UI designed for Malayalees worldwide.
+
+## Primary Services & Landing Pages
+
+- [malayalamchat.online Homepage](https://malayalamchat.online/): Free real-time Malayalam chat rooms, Mallu chat, and instant video calling.
+- [Malayalam Chatting Website](https://malayalamchat.online/malayalam-chatting-website): Kerala's #1 online chatting website for free anonymous chat and random calling.
 - [Malayalam Chat Online](https://malayalamchat.online/malayalam-chat-online): Real-time Malayalam and Manglish group discussions, public Kerala rooms.
 - [Malayalam Video Call](https://malayalamchat.online/malayalam-video-call): Free 1-on-1 Malayalam peer-to-peer WebRTC video calling & anonymous random video matching.
-- [Mallu Chat Rooms](https://malayalamchat.online/mallu-chat-rooms): Public and private Malayalam chat rooms & chatroom lobbies for Kerala districts and Gulf NRIs.
+- [Mallu Chat Rooms](https://malayalamchat.online/mallu-chat-rooms): Public and private Malayalam chat rooms for Kerala districts and Gulf NRIs.
 - [Mallu Video Call](https://malayalamchat.online/mallu-video-call): Encrypted 1-on-1 HD Mallu video calling with zero downloads or subscriptions.
 - [Mallu Chat Website](https://malayalamchat.online/mallu-chatting-website): Live Kerala community chat lobbies and rooms without registration.
 - [Live Mallu Chat](https://malayalamchat.online/mallu-chat-live): Real-time live Malayalam chat rooms and instant stranger video call matching.
@@ -18,7 +38,7 @@
 - [Mallu Random Video Calling Website](https://malayalamchat.online/mallu-random-video-call): Single-click random video matching with online Kerala strangers.
 - [Mallu Chat App](https://malayalamchat.online/mallu-chatting-app): Web-based progressive web application interface and Android APK download.
 
-## Optional & Legal
+## Legal & Compliance
 
 - [Privacy Policy](https://malayalamchat.online/privacy): Privacy policy and zero-data-logging guidelines.
 - [Terms of Service](https://malayalamchat.online/terms): Acceptable terms of service for MalayalamChat users.
