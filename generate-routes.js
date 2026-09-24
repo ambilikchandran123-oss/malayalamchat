@@ -186,6 +186,12 @@ const routeMetadata = {
     description: 'Disclaimer for MalayalamChat free online video call and strangers chat platform.',
     h1: 'Disclaimer - MalayalamChat',
     intro: 'Service disclaimer regarding user-generated content and third-party interactions on MalayalamChat.online.'
+  },
+  'payment-help': {
+    title: 'Payment Support & Refund Policy | MalayalamChat Online',
+    description: 'Payment support, billing assistance, and non-refundable policy details for MalluChat and Twingle. Contact teamtwingle@gmail.com.',
+    h1: 'Payment Support & Refund Policy - MalayalamChat',
+    intro: 'Official billing and payment support center for MalayalamChat.online and Twingle.online. Learn about our non-refundable policy and contact support.'
   }
 };
 

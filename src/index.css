@@ -42,7 +42,7 @@ body {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
   -webkit-text-size-adjust: 100%;
 }
 
@@ -476,6 +476,10 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+  touch-action: pan-y;
+  will-change: scroll-position;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   /* Firefox */
@@ -583,7 +587,7 @@ body {
 }
 
 .chat-input-area {
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
   border-top: 1px solid var(--panel-border);
   display: flex;
   align-items: center;
@@ -897,7 +901,10 @@ body {
   position: fixed;
   inset: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
+  height: 100%;
+  box-sizing: border-box;
+  overscroll-behavior: none;
   background: #0b141a;
   z-index: 5000;
   overflow: hidden;
@@ -915,7 +922,7 @@ body {
   left: 0;
   right: 0;
   z-index: 60;
-  padding: 1.5rem 1.25rem 3rem;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 16px 20px;
   background: linear-gradient(180deg, rgba(11, 20, 26, 0.85) 0%, rgba(11, 20, 26, 0.4) 65%, transparent 100%);
   display: flex;
   align-items: flex-start;
@@ -1021,8 +1028,8 @@ body {
 /* Picture-in-Picture Self Camera Window */
 .whatsapp-pip-card {
   position: absolute;
-  top: 90px;
-  right: 18px;
+  top: calc(85px + env(safe-area-inset-top, 0px));
+  right: 16px;
   width: 110px;
   height: 155px;
   border-radius: 16px;
@@ -1039,8 +1046,8 @@ body {
   .whatsapp-pip-card {
     width: 95px;
     height: 135px;
-    top: 85px;
-    right: 14px;
+    top: calc(76px + env(safe-area-inset-top, 0px));
+    right: 12px;
     border-radius: 14px;
   }
 }
@@ -1090,7 +1097,7 @@ body {
 /* Floating Bottom Control Dock */
 .whatsapp-dock {
   position: absolute;
-  bottom: 24px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 16px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 80;
@@ -1099,25 +1106,20 @@ body {
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 40px;
-  padding: 10px 18px;
+  padding: 10px 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  gap: 12px;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.7);
-  max-width: calc(100vw - 24px);
-}
-
-@media (max-width: 480px) {
-  .whatsapp-dock {
-    gap: 10px;
-    padding: 8px 14px;
-    bottom: 18px;
-  }
+  max-width: calc(100vw - 16px);
+  width: auto;
+  box-sizing: border-box;
 }
 
 .whatsapp-ctrl-btn {
-  width: 50px;
-  height: 50px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: none;
   display: flex;
@@ -1127,13 +1129,13 @@ body {
   transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
   background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
+  flex-shrink: 0;
 }
 
-@media (max-width: 480px) {
-  .whatsapp-ctrl-btn {
-    width: 44px;
-    height: 44px;
-  }
+.whatsapp-ctrl-btn svg {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
 }
 
 .whatsapp-ctrl-btn:hover {
@@ -1159,21 +1161,97 @@ body {
 .whatsapp-ctrl-btn.end-call {
   background: #ea4335;
   color: #ffffff;
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
   box-shadow: 0 6px 20px rgba(234, 67, 53, 0.45);
 }
 
-@media (max-width: 480px) {
-  .whatsapp-ctrl-btn.end-call {
-    width: 50px;
-    height: 50px;
-  }
+.whatsapp-ctrl-btn.end-call svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .whatsapp-ctrl-btn.end-call:hover {
   background: #d93025;
   transform: scale(1.08);
+}
+
+@media (max-width: 480px) {
+  .whatsapp-dock {
+    gap: 8px;
+    padding: 8px 12px;
+    bottom: calc(18px + env(safe-area-inset-bottom, 16px));
+    max-width: calc(100vw - 16px);
+  }
+  .whatsapp-ctrl-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .whatsapp-ctrl-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+  .whatsapp-ctrl-btn.end-call {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+  .whatsapp-ctrl-btn.end-call svg {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 380px) {
+  .whatsapp-dock {
+    gap: 6px;
+    padding: 6px 10px;
+    max-width: calc(100vw - 12px);
+  }
+  .whatsapp-ctrl-btn {
+    width: 40px;
+    height: 40px;
+  }
+  .whatsapp-ctrl-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  .whatsapp-ctrl-btn.end-call {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+  }
+  .whatsapp-ctrl-btn.end-call svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 330px) {
+  .whatsapp-dock {
+    gap: 4px;
+    padding: 5px 8px;
+    max-width: calc(100vw - 8px);
+  }
+  .whatsapp-ctrl-btn {
+    width: 36px;
+    height: 36px;
+  }
+  .whatsapp-ctrl-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .whatsapp-ctrl-btn.end-call {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+  }
+  .whatsapp-ctrl-btn.end-call svg {
+    width: 18px;
+    height: 18px;
+  }
 }
 
 /* Voice Call Screen */
@@ -1260,6 +1338,84 @@ body {
   display: flex;
   align-items: center;
   gap: 5px;
+}
+
+@media (max-height: 700px) {
+  .whatsapp-voice-avatar-wrap {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1.25rem;
+  }
+  .whatsapp-voice-avatar {
+    width: 95px;
+    height: 95px;
+    font-size: 2.5rem;
+  }
+  .whatsapp-voice-name {
+    font-size: 1.4rem;
+    margin-bottom: 0.25rem;
+  }
+  .whatsapp-voice-screen {
+    padding: 1.5rem 1rem calc(80px + env(safe-area-inset-bottom, 16px));
+  }
+}
+
+@media (max-height: 560px) {
+  .whatsapp-voice-avatar-wrap {
+    width: 90px;
+    height: 90px;
+    margin-bottom: 0.8rem;
+  }
+  .whatsapp-voice-avatar {
+    width: 72px;
+    height: 72px;
+    font-size: 1.9rem;
+  }
+  .whatsapp-voice-name {
+    font-size: 1.15rem;
+    margin-bottom: 0.2rem;
+  }
+  .whatsapp-voice-status {
+    font-size: 0.82rem;
+    margin-bottom: 0.3rem;
+  }
+  .whatsapp-voice-meta {
+    font-size: 0.75rem;
+  }
+  .whatsapp-voice-screen {
+    padding: 1rem 1rem calc(70px + env(safe-area-inset-bottom, 16px));
+  }
+}
+
+/* Payment Support Flow & Button */
+.payment-issue-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 16px;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 12px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-sizing: border-box;
+}
+
+.payment-issue-btn:hover {
+  background: rgba(74, 222, 128, 0.12);
+  border-color: rgba(74, 222, 128, 0.35);
+  color: var(--primary);
+  box-shadow: 0 0 16px rgba(74, 222, 128, 0.15);
+  transform: translateY(-1px);
 }
 
 

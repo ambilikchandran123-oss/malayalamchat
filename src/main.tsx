@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
-import { PrivacyPage, TermsPage, AUPPage, DisclaimerPage } from './LegalPages.tsx'
+import { PrivacyPage, TermsPage, AUPPage, DisclaimerPage, PaymentHelpPage } from './LegalPages.tsx'
 import { 
   MalluChattingAppPage, 
   MalluTelegramChattingPage, 
@@ -27,6 +27,7 @@ if (path.includes('/privacy')) ComponentToRender = PrivacyPage;
 if (path.includes('/terms')) ComponentToRender = TermsPage;
 if (path.includes('/aup')) ComponentToRender = AUPPage;
 if (path.includes('/disclaimer')) ComponentToRender = DisclaimerPage;
+if (path.includes('/payment-help')) ComponentToRender = PaymentHelpPage;
 if (path.includes('/mallu-chat-rooms') || path.includes('/mallu-chat-room') || path.includes('/mallu-chatroom')) ComponentToRender = MalluChatRoomsPage;
 if ((path.includes('/mallu-video-call') || path.includes('/malayalam-video-call') || path.includes('/malayalam-video-chat')) && !path.includes('/mallu-free-video-call') && !path.includes('/mallu-random-video-call')) ComponentToRender = MalluVideoCallPage;
 if (path.includes('/mallu-open-chat') || path.includes('/open-chat-mallu') || path.includes('/mallu-openchat')) ComponentToRender = MalluOpenChatPage;

@@ -3,7 +3,7 @@ import { MalluLogo } from './MalluLogo';
 import { PeerEngine } from './utils/peer-engine';
 import { isSpam, RateLimiter } from './utils/spam-filter';
 import { ringtone } from './utils/ringtone';
-import { Send, Phone, PhoneCall, Link as LinkIcon, Copy, Mic, Check, CheckCheck, MicOff, PhoneOff, X, Reply, Trash2, Video, VideoOff, Users, Lock, Download, Shuffle, Crown, Upload, AlertTriangle, MapPin, Image as ImageIcon, Camera, Loader2, ChevronDown, SwitchCamera, Volume2, VolumeX, UserPlus, Clock, Inbox } from 'lucide-react';
+import { Send, Phone, PhoneCall, Link as LinkIcon, Copy, Mic, Check, CheckCheck, MicOff, PhoneOff, X, Reply, Trash2, Video, VideoOff, Users, Lock, Download, Shuffle, Crown, Upload, AlertTriangle, MapPin, Image as ImageIcon, Camera, Loader2, ChevronDown, SwitchCamera, Volume2, VolumeX, UserPlus, Clock, Inbox, HelpCircle } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid';
 import { motion } from 'framer-motion';
 import { GifPickerModal } from './components/GifPickerModal';
@@ -383,8 +383,25 @@ export const formatRequestTime = (timestamp: number) => {
 
 export default function App() {
   const [viewMode, setViewMode] = useState<'private' | 'public' | 'random'>('public');
-  const [username, setUsername] = useState<string>('');
+  const [username, setUsername] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('malluchat_username') || '';
+    }
+    return '';
+  });
   const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const handleSaveUsername = (nameOverride?: string) => {
+    const raw = nameOverride !== undefined ? nameOverride : username;
+    const finalName = raw.trim();
+    if (finalName.length >= 2) {
+      setUsername(finalName);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('malluchat_username', finalName);
+      }
+      setShowLoginModal(false);
+    }
+  };
 
   // Premium paywall states
   const [isPremium, setIsPremium] = useState<boolean>(() => localStorage.getItem('malluchat_premium') === 'true');
@@ -1963,8 +1980,13 @@ export default function App() {
       setUnreadCount(0);
       setShowScrollBottomBtn(false);
     }
-    const targetRef = viewMode === 'public' ? publicMessagesEndRef : messagesEndRef;
-    targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const container = chatContainerRef.current;
+    if (container) {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    } else {
+      const targetRef = viewMode === 'public' ? publicMessagesEndRef : messagesEndRef;
+      targetRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const handleChatScroll = () => {
@@ -2443,11 +2465,6 @@ export default function App() {
     setReplyingTo(null);
     sendPrivateMessage({ id: uuidv4(), type: 'typing_stop' });
     sentSound.play().catch(() => { });
-
-    // Dismiss virtual keyboard on smartphones
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
     scrollToBottom(true);
   };
 
@@ -2479,11 +2496,6 @@ export default function App() {
 
     setPublicInput('');
     setReplyingTo(null);
-
-    // Dismiss virtual keyboard on smartphones
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
     scrollToBottom(true);
   };
 
@@ -2998,6 +3010,18 @@ export default function App() {
                 )}
               </div>
             )}
+
+            {/* Payment Help & Issue Support Button */}
+            <a
+              href="https://malluchat.live/payment-help/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="payment-issue-btn"
+              title="Payment Issue Support & Policy"
+            >
+              <HelpCircle size={15} style={{ color: 'var(--primary)', flexShrink: 0 }} />
+              <span>Payment Issues or Need Help? Click Here</span>
+            </a>
           </div>
         </div>
       )}
@@ -3069,45 +3093,60 @@ export default function App() {
 
       <div className="chat-main-container">
 
-        {/* Login Modal */}
+        {/* Name-Only Join Modal */}
         {showLoginModal && (
           <div className="call-overlay" style={{ zIndex: 2000 }}>
-            <div className="glass" style={{ padding: '2rem', borderRadius: '16px', maxWidth: '350px', width: '90%', textAlign: 'center', position: 'relative' }}>
+            <div className="glass" style={{ padding: '2rem 1.8rem', borderRadius: '18px', maxWidth: '360px', width: '90%', textAlign: 'center', position: 'relative', border: '1px solid rgba(74, 222, 128, 0.25)', boxShadow: '0 20px 40px rgba(0,0,0,0.6)' }}>
               <button
                 className="icon-btn"
                 style={{ position: 'absolute', top: '15px', right: '15px' }}
                 onClick={() => setShowLoginModal(false)}
+                title="Close"
               >
                 <X size={20} />
               </button>
-              <h2 style={{ marginBottom: '0.5rem' }}>Join the Chat</h2>
-              <p style={{ color: 'var(--text-muted)', marginBottom: '1rem', fontSize: '0.88rem' }}>Choose an anonymous display name to start chatting.</p>
-              <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+              <div style={{ display: 'inline-flex', padding: '10px', borderRadius: '50%', background: 'rgba(74, 222, 128, 0.1)', color: 'var(--primary)', marginBottom: '0.8rem' }}>
+                <Users size={28} />
+              </div>
+              <h2 style={{ marginBottom: '0.35rem', fontSize: '1.4rem', fontWeight: 700 }}>Choose a Display Name</h2>
+              <p style={{ color: 'var(--text-muted)', marginBottom: '1.2rem', fontSize: '0.86rem', lineHeight: '1.4' }}>
+                Pick an anonymous handle to send messages, share media, and join voice/video calls. No password, email, or registration required!
+              </p>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                 <input
                   className="input-field"
-                  placeholder="Enter display name..."
+                  placeholder="Your display name (min 2 chars)..."
                   value={username}
                   onChange={e => setUsername(e.target.value)}
                   maxLength={20}
                   autoFocus
-                  style={{ flex: 1, margin: 0 }}
+                  style={{ flex: 1, margin: 0, padding: '0.75rem 1rem', fontSize: '0.95rem' }}
                   onKeyDown={e => {
-                    if (e.key === 'Enter' && username.trim()) setShowLoginModal(false);
+                    if (e.key === 'Enter' && username.trim().length >= 2) {
+                      handleSaveUsername();
+                    }
                   }}
                 />
                 <button
                   type="button"
                   className="btn btn-secondary"
-                  style={{ padding: '0.6rem 0.9rem', fontSize: '0.85rem', width: 'auto', margin: 0, whiteSpace: 'nowrap' }}
+                  style={{ padding: '0.6rem 0.85rem', fontSize: '0.82rem', width: 'auto', margin: 0, whiteSpace: 'nowrap' }}
                   onClick={() => {
-                    const randoms = ['Kochi_Mallu', 'Calicut_Guy', 'Thrissur_Gadhi', 'Kerala_Vibe', 'Malabar_Star', 'Trivandrum_Bro', 'Gulf_Malayali', 'Palakkad_Chathan', 'Kannur_Macha'];
-                    setUsername(randoms[Math.floor(Math.random() * randoms.length)]);
+                    const randoms = ['Kochi_Mallu', 'Calicut_Guy', 'Thrissur_Gadhi', 'Kerala_Vibe', 'Malabar_Star', 'Trivandrum_Bro', 'Gulf_Malayali', 'Palakkad_Chathan', 'Kannur_Macha', 'Alappuzha_Rider'];
+                    const chosen = randoms[Math.floor(Math.random() * randoms.length)];
+                    setUsername(chosen);
                   }}
                   title="Generate Random Nickname"
                 >
                   🎲 Random
                 </button>
               </div>
+
+              {username.trim().length > 0 && username.trim().length < 2 && (
+                <div style={{ color: '#f87171', fontSize: '0.75rem', textAlign: 'left', marginBottom: '8px' }}>
+                  * Name must be at least 2 characters long
+                </div>
+              )}
 
               {/* Quick Kerala District Tags */}
               <div style={{ marginBottom: '1.2rem', textAlign: 'left' }}>
@@ -3119,11 +3158,15 @@ export default function App() {
                       type="button"
                       onClick={() => {
                         const cleanDist = dist.replace(/[🌴✈️]\s*/g, '');
+                        let nextName = '';
                         if (!username.trim()) {
-                          setUsername(`${cleanDist}_User`);
+                          nextName = `${cleanDist}_User`;
                         } else if (!username.includes(cleanDist)) {
-                          setUsername(`${username}_${cleanDist}`);
+                          nextName = `${username}_${cleanDist}`;
+                        } else {
+                          nextName = username;
                         }
+                        setUsername(nextName);
                       }}
                       style={{
                         background: 'rgba(255,255,255,0.06)',
@@ -3143,13 +3186,13 @@ export default function App() {
 
               <button
                 className="btn btn-primary"
-                style={{ marginTop: '0.5rem' }}
-                disabled={!username.trim()}
-                onClick={() => setShowLoginModal(false)}
+                style={{ marginTop: '0.3rem', width: '100%', padding: '0.8rem', fontWeight: 600, fontSize: '1rem' }}
+                disabled={username.trim().length < 2}
+                onClick={() => handleSaveUsername()}
               >
                 Start Chatting
               </button>
-              <p style={{ marginTop: '1.2rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              <p style={{ marginTop: '1rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                 By continuing, you agree to our <br /><a href="terms" target="_blank" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Terms & Conditions</a> and <a href="privacy" target="_blank" style={{ color: 'var(--primary)', textDecoration: 'none' }}>Privacy Policy</a>.
               </p>
             </div>
@@ -3496,22 +3539,21 @@ export default function App() {
             </div>
 
             {/* Bottom Actions */}
-            <div className="whatsapp-dock" style={{ gap: '2.5rem', padding: '12px 28px' }}>
+            <div className="whatsapp-dock" style={{ gap: '2rem', padding: '10px 24px' }}>
               <button
                 className="whatsapp-ctrl-btn end-call"
                 onClick={handleRejectCall}
                 title="Decline Call"
-                style={{ width: '62px', height: '62px' }}
               >
-                <PhoneOff size={26} />
+                <PhoneOff size={24} />
               </button>
               <button
                 className="whatsapp-ctrl-btn"
                 onClick={handleAcceptCall}
                 title="Accept Call"
-                style={{ width: '62px', height: '62px', background: '#25d366', color: '#ffffff', boxShadow: '0 6px 20px rgba(37, 211, 102, 0.45)' }}
+                style={{ background: '#25d366', color: '#ffffff', boxShadow: '0 6px 20px rgba(37, 211, 102, 0.45)' }}
               >
-                {incomingCallRequest.isVideo ? <Video size={26} /> : <Phone size={26} />}
+                {incomingCallRequest.isVideo ? <Video size={24} /> : <Phone size={24} />}
               </button>
             </div>
           </div>

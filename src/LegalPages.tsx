@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MalluLogo } from './MalluLogo';
+import { Mail, Check, Copy, AlertTriangle, HelpCircle } from 'lucide-react';
 
 const useMeta = (title: string, description: string, canonicalPath: string) => {
     useEffect(() => {
@@ -293,6 +294,322 @@ export const DisclaimerPage = () => {
 
                 <p style={{ marginTop: '0.5rem' }}><strong>Resolution Timeline:</strong><br />
                     We shall acknowledge the complaint within twenty-four (24) hours of receipt and endeavor to resolve concerns within seventy-two (72) hours, or escalate them in cooperation with lawful governmental requests as required under applicable law.</p>
+            </Section>
+        </div>
+    );
+};
+
+export const PaymentHelpPage = () => {
+    useMeta(
+        'Payment Support & Refund Policy - MalluChat',
+        'Official Payment Support, Billing Assistance, and Policy details for MalluChat and Twingle. Contact teamtwingle@gmail.com for payment help.',
+        '/payment-help'
+    );
+
+    const [issueCategory, setIssueCategory] = useState('Payment deducted, tokens not unlocked');
+    const [senderUsername, setSenderUsername] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('malluchat_username') || '';
+        }
+        return '';
+    });
+    const [upiTxnId, setUpiTxnId] = useState('');
+    const [amountPaid, setAmountPaid] = useState('100');
+    const [customNotes, setCustomNotes] = useState('');
+    const [copied, setCopied] = useState(false);
+
+    const prefilledOptions = [
+        'Payment deducted, tokens not unlocked',
+        'UPI QR code scanned but transaction pending',
+        'Double deduction on UPI app',
+        'Screenshot verification inquiry',
+        'Other billing issue'
+    ];
+
+    const generateEmailBody = () => {
+        return `Hello Twingle & MalluChat Support Team,
+
+I am writing regarding a payment issue on MalluChat.online / Twingle.online.
+
+--- Issue Summary ---
+Category: ${issueCategory}
+Username: ${senderUsername || '[Not provided]'}
+Amount Paid: ₹${amountPaid}
+UPI / UTR Transaction ID: ${upiTxnId || '[Please enter your 12-digit UPI UTR number]'}
+Date & Time: ${new Date().toLocaleDateString()}
+
+--- Details & Custom Notes ---
+${customNotes || 'Attached is my payment screenshot for verification.'}
+
+Please review my transaction and help resolve this issue. I have attached the screenshot of my payment confirmation from my UPI app.
+
+Thank you!`;
+    };
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText(generateEmailBody());
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+    };
+
+    const mailtoUrl = `mailto:teamtwingle@gmail.com?subject=${encodeURIComponent(`MalluChat Payment Support: ${issueCategory} (Txn: ${upiTxnId || 'Pending'})`)}&body=${encodeURIComponent(generateEmailBody())}`;
+
+    return (
+        <div style={containerStyle} className="glass">
+            <Header title="Payment Support & Policy" />
+
+            {/* Policy Notice Box */}
+            <div style={{
+                background: 'rgba(239, 68, 68, 0.08)',
+                border: '1px solid rgba(239, 68, 68, 0.3)',
+                borderRadius: '16px',
+                padding: '1.25rem 1.5rem',
+                marginBottom: '2rem',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px'
+            }}>
+                <AlertTriangle size={24} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                    <h3 style={{ color: '#ef4444', fontSize: '1.1rem', margin: '0 0 0.4rem 0' }}>Strict Non-Refundable Policy</h3>
+                    <p style={{ color: 'var(--text-main)', fontSize: '0.92rem', margin: 0, lineHeight: '1.5' }}>
+                        All payments and contributions made on <strong>MalluChat</strong> and <strong>Twingle</strong> are strictly non-refundable and are dedicated directly toward calling tokens, peer-to-peer WebRTC server maintenance, and premium account access privileges.
+                    </p>
+                </div>
+            </div>
+
+            {/* Turnaround Time Notice */}
+            <div style={{
+                background: 'rgba(74, 222, 128, 0.08)',
+                border: '1px solid rgba(74, 222, 128, 0.25)',
+                borderRadius: '16px',
+                padding: '1.25rem 1.5rem',
+                marginBottom: '2rem',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '12px'
+            }}>
+                <HelpCircle size={24} style={{ color: 'var(--primary)', flexShrink: 0, marginTop: '2px' }} />
+                <div>
+                    <h3 style={{ color: 'var(--primary)', fontSize: '1.1rem', margin: '0 0 0.4rem 0' }}>Support Turnaround Time</h3>
+                    <p style={{ color: 'var(--text-main)', fontSize: '0.92rem', margin: 0, lineHeight: '1.5' }}>
+                        Our support team reviews screenshots sent to <a href="mailto:teamtwingle@gmail.com" style={{ color: 'var(--primary)', fontWeight: 600 }}>teamtwingle@gmail.com</a> promptly and usually responds within 1 to 365 days.
+                    </p>
+                </div>
+            </div>
+
+            {/* Interactive Support Flow Section */}
+            <Section title="Direct Email Support Contact Flow">
+                <p style={{ marginBottom: '1.2rem' }}>
+                    If you experienced an issue with your UPI payment or need manual transaction verification, customize the details below and email <strong style={{ color: 'var(--primary)' }}>teamtwingle@gmail.com</strong> with your transaction screenshot.
+                </p>
+
+                <div style={{
+                    background: 'rgba(0, 0, 0, 0.35)',
+                    border: '1px solid var(--panel-border)',
+                    borderRadius: '16px',
+                    padding: '1.5rem',
+                    marginBottom: '1.5rem'
+                }}>
+                    {/* Category Selection */}
+                    <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                            Issue Category:
+                        </label>
+                        <select
+                            value={issueCategory}
+                            onChange={(e) => setIssueCategory(e.target.value)}
+                            style={{
+                                width: '100%',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid var(--panel-border)',
+                                borderRadius: '10px',
+                                padding: '0.75rem 1rem',
+                                color: 'var(--text-main)',
+                                fontSize: '0.95rem',
+                                outline: 'none'
+                            }}
+                        >
+                            {prefilledOptions.map((opt, i) => (
+                                <option key={i} value={opt} style={{ background: '#111827', color: '#fff' }}>
+                                    {opt}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {/* Username & Amount Row */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '1rem' }}>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                                Your MalluChat Username:
+                            </label>
+                            <input
+                                type="text"
+                                value={senderUsername}
+                                onChange={(e) => setSenderUsername(e.target.value)}
+                                placeholder="e.g. Kochi_Mallu"
+                                style={{
+                                    width: '100%',
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid var(--panel-border)',
+                                    borderRadius: '10px',
+                                    padding: '0.75rem 1rem',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.95rem',
+                                    outline: 'none',
+                                    boxSizing: 'border-box'
+                                }}
+                            />
+                        </div>
+                        <div>
+                            <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                                Amount Paid (₹):
+                            </label>
+                            <input
+                                type="text"
+                                value={amountPaid}
+                                onChange={(e) => setAmountPaid(e.target.value)}
+                                placeholder="e.g. 60, 100, 150"
+                                style={{
+                                    width: '100%',
+                                    background: 'rgba(255, 255, 255, 0.05)',
+                                    border: '1px solid var(--panel-border)',
+                                    borderRadius: '10px',
+                                    padding: '0.75rem 1rem',
+                                    color: 'var(--text-main)',
+                                    fontSize: '0.95rem',
+                                    outline: 'none',
+                                    boxSizing: 'border-box'
+                                }}
+                            />
+                        </div>
+                    </div>
+
+                    {/* UTR / Transaction ID */}
+                    <div style={{ marginBottom: '1rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                            UPI UTR / Reference ID (12 Digits):
+                        </label>
+                        <input
+                            type="text"
+                            value={upiTxnId}
+                            onChange={(e) => setUpiTxnId(e.target.value)}
+                            placeholder="e.g. 425619384729"
+                            style={{
+                                width: '100%',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid var(--panel-border)',
+                                borderRadius: '10px',
+                                padding: '0.75rem 1rem',
+                                color: 'var(--text-main)',
+                                fontSize: '0.95rem',
+                                outline: 'none',
+                                boxSizing: 'border-box'
+                            }}
+                        />
+                    </div>
+
+                    {/* Custom Notes / Description */}
+                    <div style={{ marginBottom: '1.25rem' }}>
+                        <label style={{ display: 'block', fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '0.4rem' }}>
+                            Describe Your Issue or Question:
+                        </label>
+                        <textarea
+                            value={customNotes}
+                            onChange={(e) => setCustomNotes(e.target.value)}
+                            placeholder="Add details about which UPI app was used (GPay, PhonePe, Paytm), time of payment, or error message received..."
+                            rows={4}
+                            style={{
+                                width: '100%',
+                                background: 'rgba(255, 255, 255, 0.05)',
+                                border: '1px solid var(--panel-border)',
+                                borderRadius: '10px',
+                                padding: '0.75rem 1rem',
+                                color: 'var(--text-main)',
+                                fontSize: '0.95rem',
+                                outline: 'none',
+                                boxSizing: 'border-box',
+                                resize: 'vertical'
+                            }}
+                        />
+                    </div>
+
+                    {/* Instructions for Attaching Screenshots */}
+                    <div style={{
+                        background: 'rgba(255, 255, 255, 0.03)',
+                        border: '1px dashed rgba(255, 255, 255, 0.15)',
+                        borderRadius: '12px',
+                        padding: '1rem',
+                        marginBottom: '1.5rem',
+                        fontSize: '0.85rem',
+                        color: 'var(--text-muted)'
+                    }}>
+                        <strong style={{ color: 'var(--text-main)' }}>📸 Important: Attach Screenshot to Your Email</strong><br />
+                        Please attach the original screenshot of your successful transaction from Google Pay, PhonePe, Paytm, or your banking app. Ensure the 12-digit UTR number and date are clearly readable.
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+                        <a
+                            href={mailtoUrl}
+                            style={{
+                                flex: 1,
+                                minWidth: '220px',
+                                background: 'var(--primary)',
+                                color: '#000',
+                                padding: '0.85rem 1.25rem',
+                                borderRadius: '12px',
+                                fontWeight: 700,
+                                textDecoration: 'none',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px',
+                                boxShadow: '0 4px 15px rgba(74, 222, 128, 0.3)',
+                                fontSize: '0.95rem'
+                            }}
+                        >
+                            <Mail size={18} />
+                            Send Email to teamtwingle@gmail.com
+                        </a>
+                        <button
+                            type="button"
+                            onClick={handleCopy}
+                            style={{
+                                background: copied ? 'rgba(74, 222, 128, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                                border: '1px solid var(--panel-border)',
+                                color: copied ? 'var(--primary)' : 'var(--text-main)',
+                                padding: '0.85rem 1.25rem',
+                                borderRadius: '12px',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '8px',
+                                fontSize: '0.95rem',
+                                transition: 'all 0.2s'
+                            }}
+                        >
+                            {copied ? <Check size={18} /> : <Copy size={18} />}
+                            {copied ? 'Copied Template!' : 'Copy Support Template'}
+                        </button>
+                    </div>
+                </div>
+            </Section>
+
+            <Section title="Frequently Asked Questions">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px' }}>
+                        <strong style={{ color: '#fff', display: 'block', marginBottom: '0.3rem' }}>Why are payments non-refundable?</strong>
+                        <span>Payments go directly into instant compute credits, WebRTC peer signaling resources, and calling tokens allocated for real-time video and audio connections.</span>
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '10px' }}>
+                        <strong style={{ color: '#fff', display: 'block', marginBottom: '0.3rem' }}>How long does manual screenshot verification take?</strong>
+                        <span>Our support team reviews screenshots sent to teamtwingle@gmail.com promptly and usually responds within 1 to 365 days.</span>
+                    </div>
+                </div>
             </Section>
         </div>
     );
