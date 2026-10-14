@@ -2507,7 +2507,8 @@ body {
 /* Floating Scroll To Bottom Button */
 .scroll-bottom-btn {
   position: absolute;
-  bottom: 85px;
+  bottom: 185px;
+  bottom: calc(185px + env(safe-area-inset-bottom, 0px));
   right: 20px;
   width: 42px;
   height: 42px;
@@ -2524,6 +2525,12 @@ body {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+}
+
+@media (min-width: 768px) {
+  .scroll-bottom-btn {
+    bottom: 130px;
+  }
 }
 
 .scroll-bottom-btn:hover {
